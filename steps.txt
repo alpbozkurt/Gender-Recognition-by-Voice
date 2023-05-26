@@ -1,0 +1,9 @@
+git clone https://github.com/alpbozkurt/Gender-Recognition-by-Voice
+cd Gender-Recognition-by-Voice
+cd src
+poetry init -n
+poetry add $( cat requirements.txt )
+#python3 app.py
+export FLASK_RUN_PORT=8000
+flask run
+
