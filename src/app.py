@@ -10,12 +10,20 @@ from utils import extract_features
 app = Flask(__name__)
 
 MODEL = None
+scaler = None
 
+@app.before_first_request
+def load_model():
+    global MODEL
+    global scaler
+
+    MODEL = XGBClassifier()
+    MODEL.load_model(config.MODEL_PATH)
+    scaler = pickle.load(open(config.SCALAR_PATH, 'rb'))
 
 def audio_prediction(audio_file):
     feats = extract_features(
         audio_file, mel=True, mfcc=True, chroma=True, contrast=True)
-    scaler = pickle.load(open(config.SCALAR_PATH, 'rb'))
     X = scaler.transform(feats.reshape(1, -1))
     pred = MODEL.predict_proba(X)
     return pred[0][1]
